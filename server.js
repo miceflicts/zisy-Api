@@ -4,6 +4,7 @@ const Book = require("./models/bookModel")
 const app = express()
 
 app.use(express.json())
+app.use(express.urlencoded({extended: false}))
 
 // routes
 app.get("/", (req, res) => {
@@ -37,6 +38,24 @@ app.post("/books", async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({message: error.message});
+    }
+})
+
+// update books
+app.put("/books/:id", async(req, res) => {
+    try {
+        const {id} = req.params;
+        const book = await Book.findByIdAndUpdate(id, req.body);
+
+        // couldn´t find any product in database with X id
+        if (!book) {
+            return res.status(404).json({message: `cannot find any product with ID ${id}`})
+        }
+        const updatedBook = await Book.findById(id)
+        res.status(200).json(updatedBook);
+
+    } catch(error) {
         res.status(500).json({message: error.message});
     }
 })
