@@ -1,7 +1,11 @@
+require("dotenv").config()
 const express = require("express")
 const mongoose = require("mongoose")
 const Book = require("./models/bookModel")
 const app = express()
+
+const MONGO_URL = process.env.MONGO_URL
+const PORT = process.env.PORT
 
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
@@ -60,10 +64,25 @@ app.put("/books/:id", async(req, res) => {
     }
 })
 
-mongoose.connect("mongodb+srv://admin:miceflicts123@zisyapi.zqvzvi5.mongodb.net/Node-API?retryWrites=true&w=majority")
+// delete books
+app.delete("/books/:id", async(req,res) => {
+    try {
+        const {id} = req.params;
+        const book = await Book.findByIdAndDelete(id);
+        if(!book) {
+            res.status(404).json({message: `No product found with the ID ${id}`})
+        }
+        res.status(200).json(book);
+
+    } catch(error){
+        res.status(500).json({message: error.message});
+    }
+})
+
+mongoose.connect(MONGO_URL)
     .then(() => {
-        app.listen(3000, () => {
-            console.log("Node API APP is running on port 3000")
+        app.listen(PORT, () => {
+            console.log(`Node API APP is running on port ${PORT}`)
         })
     }).catch((err) => {
         console.log(err)
