@@ -1,10 +1,10 @@
-const Book = require("../models/bookModel")
+const AllBooks = require("../models/allBooksModel")
 const asyncHandler = require("express-async-handler")
 
 // Get all Books
-const getBooks = asyncHandler(async(req, res) => {
+const getAllBooks = asyncHandler(async(req, res) => {
     try{
-        const books = await Book.find({});
+        const books = await AllBooks.find({});
         res.status(200).json(books);
     } catch(error) {
         res.status(500);
@@ -16,7 +16,7 @@ const getBooks = asyncHandler(async(req, res) => {
 const getBooksID = asyncHandler(async(req,res) => {
     try{
         const {id} = req.params;
-        const books = await Book.findById(id);
+        const books = await AllBooks.findById(id);
         res.status(200).json(books)
         
     } catch(error) {
@@ -28,7 +28,7 @@ const getBooksID = asyncHandler(async(req,res) => {
 // Post new books to API
 const postNewBooks = asyncHandler(async (req, res) => {
     try{
-        const book = await Book.create(req.body);
+        const book = await AllBooks.create(req.body);
         res.status(200).json(book);
 
     } catch (error) {
@@ -42,14 +42,14 @@ const postNewBooks = asyncHandler(async (req, res) => {
 const updateBooks = asyncHandler(async(req, res) => {
     try {
         const {id} = req.params;
-        const book = await Book.findByIdAndUpdate(id, req.body);
+        const book = await AllBooks.findByIdAndUpdate(id, req.body);
 
         // couldn´t find any product in database with X id
         if (!book) {
             res.status(404);
             throw new Error(`No product found with the ID ${id}`)
         }
-        const updatedBook = await Book.findById(id)
+        const updatedBook = await AllBooks.findById(id)
         res.status(200).json(updatedBook);
 
     } catch(error) {
@@ -62,7 +62,7 @@ const updateBooks = asyncHandler(async(req, res) => {
 const deleteBooks = asyncHandler(async(req,res) => {
     try {
         const {id} = req.params;
-        const book = await Book.findByIdAndDelete(id);
+        const book = await AllBooks.findByIdAndDelete(id);
         if(!book) {
             res.status(404);
             throw new Error(`No product found with the ID ${id}`)
@@ -76,7 +76,7 @@ const deleteBooks = asyncHandler(async(req,res) => {
 })
 
 module.exports = {
-    getBooks,
+    getBooks: getAllBooks,
     getBooksID,
     postNewBooks,
     updateBooks,
