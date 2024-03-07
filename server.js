@@ -10,7 +10,9 @@ const bodyParser = require('body-parser');
 const app = express()
 
 const MONGO_URL = process.env.MONGO_URL
-const PORT = process.env.PORT
+
+const PORT = 5000
+/* const PORT = process.env.PORT */
 
 
 app.use(cors());
@@ -30,8 +32,8 @@ app.use(errorMiddleware);
 
 mongoose.connect(MONGO_URL)
     .then(() => {
-        app.listen(3000, () => {
-            console.log(`Node API APP is running on port 3000`)
+        app.listen(PORT, () => {
+            console.log(`Node API APP is running on port ${PORT}`)
         })
     }).catch((err) => {
         console.log(err)
