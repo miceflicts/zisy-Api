@@ -30,8 +30,8 @@ app.use(errorMiddleware);
 
 mongoose.connect(MONGO_URL)
     .then(() => {
-        app.listen(PORT, () => {
-            console.log(`Node API APP is running on port ${PORT}`)
+        app.listen(3000, () => {
+            console.log(`Node API APP is running on port 3000`)
         })
     }).catch((err) => {
         console.log(err)
